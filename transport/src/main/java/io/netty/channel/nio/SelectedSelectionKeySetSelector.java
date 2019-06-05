@@ -21,8 +21,17 @@ import java.nio.channels.Selector;
 import java.nio.channels.spi.SelectorProvider;
 import java.util.Set;
 
+/**
+ * 基于 Netty SelectedSelectionKeySet 作为 selectionKeys 的 Selector 实现类
+ */
 final class SelectedSelectionKeySetSelector extends Selector {
+    /**
+     * SelectedSelectionKeySet 对象
+     */
     private final SelectedSelectionKeySet selectionKeys;
+    /**
+     * 原始 Java NIO Selector 对象
+     */
     private final Selector delegate;
 
     SelectedSelectionKeySetSelector(Selector delegate, SelectedSelectionKeySet selectionKeys) {
