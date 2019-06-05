@@ -40,6 +40,7 @@ public interface EventExecutorGroup extends ScheduledExecutorService, Iterable<E
      *
      * @return the {@link #terminationFuture()}
      */
+    // 优雅关闭
     Future<?> shutdownGracefully();
 
     /**
@@ -81,11 +82,13 @@ public interface EventExecutorGroup extends ScheduledExecutorService, Iterable<E
     /**
      * Returns one of the {@link EventExecutor}s managed by this {@link EventExecutorGroup}.
      */
+    // 选择一个 EventExecutor 对象
     EventExecutor next();
 
     @Override
     Iterator<EventExecutor> iterator();
 
+    // ========== 实现自 ExecutorService 接口 ==========
     @Override
     Future<?> submit(Runnable task);
 
@@ -95,6 +98,7 @@ public interface EventExecutorGroup extends ScheduledExecutorService, Iterable<E
     @Override
     <T> Future<T> submit(Callable<T> task);
 
+    // ========== 实现自 ScheduledExecutorService 接口 ==========
     @Override
     ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit);
 

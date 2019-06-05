@@ -102,6 +102,15 @@ public interface Channel extends AttributeMap, ChannelOutboundInvoker, Comparabl
     /**
      * Returns {@code true} if the {@link Channel} is open and may get active later
      */
+    /**
+     *关闭此通道。
+     */
+    @Override
+    ChannelFuture close();
+
+    /**
+     * 判断此通道是否处于打开状态。
+     */
     boolean isOpen();
 
     /**

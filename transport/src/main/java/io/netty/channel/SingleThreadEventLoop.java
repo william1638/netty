@@ -69,6 +69,7 @@ public abstract class SingleThreadEventLoop extends SingleThreadEventExecutor im
         return (EventLoop) super.next();
     }
 
+    //，注册 Channel 到 EventLoop 上
     @Override
     public ChannelFuture register(Channel channel) {
         return register(new DefaultChannelPromise(channel, this));
@@ -77,7 +78,9 @@ public abstract class SingleThreadEventLoop extends SingleThreadEventExecutor im
     @Override
     public ChannelFuture register(final ChannelPromise promise) {
         ObjectUtil.checkNotNull(promise, "promise");
+        // 注册 Channel 到 EventLoop 上
         promise.channel().unsafe().register(this, promise);
+        // 返回 ChannelPromise 对象
         return promise;
     }
 
@@ -103,20 +106,24 @@ public abstract class SingleThreadEventLoop extends SingleThreadEventExecutor im
     @UnstableApi
     public final void executeAfterEventLoopIteration(Runnable task) {
         ObjectUtil.checkNotNull(task, "task");
+        //// 关闭时，拒绝任务
         if (isShutdown()) {
             reject();
         }
 
+        /// 添加到任务队列
         if (!tailTasks.offer(task)) {
             reject(task);
         }
 
+        // // 唤醒线程
         if (wakesUpForTask(task)) {
             wakeup(inEventLoop());
         }
     }
 
     /**
+     * 移除指定任务
      * Removes a task that was added previously via {@link #executeAfterEventLoopIteration(Runnable)}.
      *
      * @param task to be removed.
@@ -128,16 +135,21 @@ public abstract class SingleThreadEventLoop extends SingleThreadEventExecutor im
         return tailTasks.remove(ObjectUtil.checkNotNull(task, "task"));
     }
 
+    //判断该任务是否需要唤醒线程
     @Override
     protected boolean wakesUpForTask(Runnable task) {
         return !(task instanceof NonWakeupRunnable);
     }
 
+    /**
+     * 在运行完所有任务后，执行 tailTasks 队列中的任务
+     */
     @Override
     protected void afterRunningAllTasks() {
         runAllTasksFrom(tailTasks);
     }
 
+    //基于两个队列来判断是否还有任务。
     @Override
     protected boolean hasTasks() {
         return super.hasTasks() || !tailTasks.isEmpty();
