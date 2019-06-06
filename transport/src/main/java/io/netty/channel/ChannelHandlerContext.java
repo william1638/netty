@@ -153,6 +153,7 @@ public interface ChannelHandlerContext extends AttributeMap, ChannelInboundInvok
      */
     boolean isRemoved();
 
+    // ========== ChannelInboundInvoker 相关 ==========
     @Override
     ChannelHandlerContext fireChannelRegistered();
 
@@ -180,6 +181,7 @@ public interface ChannelHandlerContext extends AttributeMap, ChannelInboundInvok
     @Override
     ChannelHandlerContext fireChannelWritabilityChanged();
 
+    // ========== ChannelOutboundInvoker 相关 ==========
     @Override
     ChannelHandlerContext read();
 
@@ -191,11 +193,13 @@ public interface ChannelHandlerContext extends AttributeMap, ChannelInboundInvok
      */
     ChannelPipeline pipeline();
 
+    // ========== ByteBuf 相关 ==========
     /**
      * Return the assigned {@link ByteBufAllocator} which will be used to allocate {@link ByteBuf}s.
      */
     ByteBufAllocator alloc();
 
+    // ========== AttributeMap 相关 ==========
     /**
      * @deprecated Use {@link Channel#attr(AttributeKey)}
      */
