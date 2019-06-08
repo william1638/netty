@@ -942,6 +942,7 @@ abstract class AbstractChannelHandlerContext implements ChannelHandlerContext, R
         AbstractChannelHandlerContext ctx = this;
         do {
             ctx = ctx.prev;
+            //返回outbound节点
         } while ((ctx.executionMask & mask) == 0);
         return ctx;
     }
